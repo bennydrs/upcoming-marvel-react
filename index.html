@@ -4,11 +4,13 @@
 <head>
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/src/img/favicon.ico" />
+  <link rel="manifest" href="./manifest.json" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Upcoming Marvel</title>
   <meta name="title" content="Upcoming Marvel">
   <meta name="description" content="Upcoming marvel movie and series">
-  <meta name="keywords" content="upcoming marvel, marvel, movie, series, film, disney+, disney plus">
+  <meta name="keywords"
+    content="upcoming marvel, upcoming marvel movies, marvel, movie, series, film, disney+, disney plus">
 
   <!-- Open Graph / Facebook -->
   <meta property="og:type" content="website">
@@ -24,16 +26,31 @@
   <meta property="twitter:description" content="Upcoming marvel movie and series">
   <meta property="twitter:image" content="https://upcoming-marvel.netlify.app/src/img/upcoming-marvel-meta.jpg">
 
+  <link rel="shortcut icon" href="/src/img/favicon.ico" type="image/x-icon" />
+  <link rel="apple-touch-icon" href="/src/img/apple-touch-icon.png" />
+
   <link rel="stylesheet" href="/src/index.css">
 </head>
 
 <body class="bg-gray-200">
   <div id="root">
     <div class="h-screen flex justify-center items-center bg-primary">
-      <img src="/src/img/upcoming-marvel-logo.png" class="w-20" alt="">
+      <img src="/src/img/upcoming-marvel-logo.png" class="w-24" alt="">
     </div>
   </div>
   <script type="module" src="/src/main.jsx"></script>
+  <script>
+    window.addEventListener('online', () => {
+      window.location.reload()
+    })
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then((reg) => console.log('Success: ', reg.scope))
+          .catch((err) => console.log('Failure: ', err));
+      })
+    }
+  </script>
 </body>
 
 </html>
