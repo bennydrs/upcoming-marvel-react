@@ -5,7 +5,7 @@ const ContentSkeleton = () => {
         .fill()
         .map((_, index) => (
           <div className="animate-pulse flex space-x-4 py-1" key={index}>
-            <div className="rounded-2xl bg-gray-300 h-56 w-40"></div>
+            <div className="rounded-2xl bg-gray-300 h-48 md:h-56 w-32 md:w-40"></div>
             <div className="flex-1 space-y-6 py-1">
               <div className="h-6 bg-gray-300 rounded"></div>
               <div className="space-y-3">
