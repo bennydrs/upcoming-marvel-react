@@ -3,12 +3,12 @@
   "name": "Upcoming Marvel",
   "icons": [
     {
-      "src": "/src/img/android-chrome-192x192.png",
+      "src": "/img/android-chrome-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/src/img/android-chrome-512x512.png",
+      "src": "/img/android-chrome-512x512.png",
       "type": "image/png",
       "sizes": "512x512"
     }

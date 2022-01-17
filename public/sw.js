@@ -1,6 +1,6 @@
 const CACHE_NAME = "um-assets"
 
-const assets = ["/offline.html", "/src/img/wifi_off.png"]
+const assets = ["/offline.html", "/img/wifi_off.png"]
 
 // Install SW
 self.addEventListener("install", (event) => {
