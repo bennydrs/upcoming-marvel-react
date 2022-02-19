@@ -1,13 +1,16 @@
 import ContentItem from "../components/ContentItem"
 import { useState } from "react"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence, motion } from "framer-motion"
 import useContent from "../hooks/useContent"
 import ContentSkeleton from "../components/Skeleton/ContentSkeleton"
 import Category from "./Category"
 import NoData from "../components/NoData"
 import Error from "../components/Error"
+import { useParams } from "react-router-dom"
+import ModalContent from "../components/ModalContent"
 
 const Content = ({ search }) => {
+  const { id } = useParams()
   const [filter, setFilter] = useState("All")
   const { data, error, isLoading, refetch } = useContent(filter)
 
@@ -19,6 +22,7 @@ const Content = ({ search }) => {
   return (
     <>
       <Category filter={filter} setFilter={setFilter} />
+      <AnimatePresence>{id && <ModalContent id={id} filter={filter} key="item" />}</AnimatePresence>
       <AnimatePresence>
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6">
           {isLoading ? (
