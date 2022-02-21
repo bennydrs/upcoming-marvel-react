@@ -100,7 +100,7 @@ const ModalContent = ({ id, filter }) => {
                           renderer={(props) => <CountdownTime data={props} type={content?.type} />}
                         />
                       ) : (
-                        <div className="flex items-center mt-3">
+                        <div className="flex items-center justify-center mt-3">
                           <p className="text-gray-500">Release date to be announced</p>
                         </div>
                       )}
