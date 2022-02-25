@@ -1,12 +1,18 @@
+import useLinkDownload from "../hooks/useLinkDownload"
+
 const Footer = () => {
+  const { data, isLoading } = useLinkDownload()
+  const url = data?.data.attributes.url
+
   return (
     <footer className="w-full bg-gray-900 text-white py-3 mt-4">
       <div className="container text-center">
         <a
-          href="https://drive.google.com/file/d/1myx4zpZkaeMqVLAwX4GDHtukX_6Z_UWm/view?usp=sharing"
+          href={url}
           target="_blank"
           rel="noopener noreferrer"
           className="hover:text-gray-400 flex items-center justify-center"
+          style={{ pointerEvents: isLoading && "none" }}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
