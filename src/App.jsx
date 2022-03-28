@@ -5,7 +5,7 @@ import { useState } from "react"
 import { AnimateSharedLayout } from "framer-motion"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useEffect } from "react"
-import ReactGA from "react-ga"
+import ReactGA from "react-ga4"
 
 ReactGA.initialize("G-5GJ8QF8ESG")
 
@@ -13,7 +13,7 @@ function App() {
   const [search, setSearch] = useState("")
 
   useEffect(() => {
-    ReactGA.pageview(window.location.pathname + window.location.search)
+    ReactGA.send("pageview")
   })
 
   return (
