@@ -4,9 +4,17 @@ import Content from "./containers/Content"
 import { useState } from "react"
 import { AnimateSharedLayout } from "framer-motion"
 import { BrowserRouter, Routes, Route } from "react-router-dom"
+import { useEffect } from "react"
+import ReactGA from "react-ga"
+
+ReactGA.initialize("G-5GJ8QF8ESG")
 
 function App() {
   const [search, setSearch] = useState("")
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname + window.location.search)
+  })
 
   return (
     <div className="flex flex-col h-screen justify-between">
