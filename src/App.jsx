@@ -7,7 +7,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useEffect } from "react"
 import ReactGA from "react-ga4"
 
-ReactGA.initialize("G-5GJ8QF8ESG")
+ReactGA.initialize("G-Z93PFFW1YM")
 
 function App() {
   const [search, setSearch] = useState("")
