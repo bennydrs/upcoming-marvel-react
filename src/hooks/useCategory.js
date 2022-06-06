@@ -3,11 +3,14 @@ import axiosAPI from "../config/axiosAPI"
 
 const getCategories = async () => {
   let categories = [{ id: 0, name: "All" }]
-  const { data } = await axiosAPI.get("/category-filter")
+  try {
+    const { data } = await axiosAPI.get("/category-filter")
 
-  const newCategories = [...categories, ...data]
-
-  return newCategories
+    const newCategories = [...categories, ...data]
+    return newCategories
+  } catch (error) {
+    throw error
+  }
 }
 
 const useCategory = () => useQuery("categories", getCategories)

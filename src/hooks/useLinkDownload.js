@@ -2,8 +2,12 @@ import { useQuery } from "react-query"
 import axiosAPI from "../config/axiosAPI"
 
 const getLinkDownload = async () => {
-  const { data } = await axiosAPI.get("/linkdownload")
-  return data
+  try {
+    const { data } = await axiosAPI.get("/linkdownload")
+    return data
+  } catch (error) {
+    throw error
+  }
 }
 
 const useLinkDownload = () => useQuery("linkDownload", getLinkDownload)
