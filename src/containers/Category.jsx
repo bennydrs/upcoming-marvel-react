@@ -1,12 +1,23 @@
-import useCategory from "../hooks/useCategory"
 import CategorySkeleton from "../components/Skeleton/CategorySkeleton"
+import { useEffect } from "react"
+import useStore from "../store"
+import { motion } from "framer-motion"
 
-const Category = ({ filter, setFilter }) => {
-  const { data: categories, isError, isLoading } = useCategory()
+const Category = () => {
+  const getCategories = useStore((state) => state.getCategories)
+  const categories = useStore((state) => state.categories)
+  const setFilter = useStore((state) => state.setFilter)
+  const filter = useStore((state) => state.filter)
+  const loading = useStore((state) => state.loading)
+  const isError = useStore((state) => state.isError)
+
+  useEffect(() => {
+    getCategories()
+  }, [])
 
   return (
     <div className="flex md:justify-center w-full py-4 overflow-x-scroll no-scrollbar space-x-3 px-2 sm:px-0">
-      {isLoading ? (
+      {loading ? (
         <CategorySkeleton />
       ) : isError ? (
         <div className="flex items-center">
@@ -33,17 +44,19 @@ const Category = ({ filter, setFilter }) => {
         </div>
       ) : (
         categories?.map((category, i) => (
-          <button
+          <motion.button
             className={`py-2 min-w-[82px] text-sm rounded-xl ${
-              category.name == filter
+              category.id === filter
                 ? "bg-primary text-white font-semibold"
                 : "bg-white hover:bg-gray-50"
             }`}
             key={i}
-            onClick={() => setFilter(category.name)}
+            onClick={() => setFilter(category.id)}
+            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: 1.08 }}
           >
             {category.name}
-          </button>
+          </motion.button>
         ))
       )}
     </div>

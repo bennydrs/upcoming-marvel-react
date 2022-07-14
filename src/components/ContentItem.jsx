@@ -3,7 +3,7 @@ import CountdownTime from "./CountdownTime"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import Badge from "./Badge"
-import { checkDate, convertTimeToReleaseDate } from "../utils"
+import { convertToDateFormat, parseDate } from "../utils"
 
 const variants = {
   hidden: {
@@ -22,32 +22,25 @@ const variants = {
   },
 }
 
-const ContentItem = ({ movie, index, filter }) => {
-  const { title, type, image, ReleaseDate, animated } = movie
-  const { date, month, year } = ReleaseDate || {}
+const ContentItem = ({ movie, index }) => {
+  const { id, title, type, image, animated, release_at, year_at } = movie
 
-  const timeToReleaseDate = convertTimeToReleaseDate(date, month, year)
-  const formatDate = checkDate(date, month, year)
-
-  // const currentDate = new Date().toISOString().slice(0, 10)
-  // const isShowing =
-  //   date &&
-  //   new Date(new Date(toDateFormat).toISOString().slice(0, 10)).getTime() >=
-  //     new Date(currentDate).getTime()
+  const timeToReleaseDate = new Date(parseDate(release_at)).getTime() - new Date().getTime()
 
   return (
-    <Link to={`/${movie.id}`}>
+    <Link to={`/${id}`}>
       <motion.div
-        key={filter}
+        layout
         variants={variants}
         initial="hidden"
         animate="visible"
         exit="removed"
         custom={index}
         className="flex bg-white rounded-3xl p-3 space-x-3 max-h-fit shadow-sm hover:bg-gray-50"
-        layoutId={`card-container-${movie.id}`}
+        layoutId={`card-container-${id}`}
+        whileTap={{ scale: 0.98 }}
       >
-        <motion.div className="w-1/3" layoutId={`card-image-container-${movie.id}`}>
+        <motion.div className="w-1/3" layoutId={`card-image-container-${id}`}>
           <img
             src={image?.url}
             alt={title}
@@ -55,23 +48,26 @@ const ContentItem = ({ movie, index, filter }) => {
             className="w-full rounded-2xl bg-gray-400"
           />
         </motion.div>
+
         <div className="w-2/3">
           <div className="flex flex-col h-full">
             <div className="h-1/2">
               <motion.h2
                 className="text-lg md:text-xl font-semibold mb-2"
-                layoutId={`card-title-${movie.id}`}
+                layoutId={`card-title-${id}`}
               >
                 {title}
               </motion.h2>
               <div className="text-sm flex space-x-2 items-center">
                 <Badge type={type} />
                 {animated && <Badge type={"A"} animated />}
-                <span className="text-gray-600">{formatDate}</span>
+                <span className="text-gray-600">
+                  {release_at ? convertToDateFormat(release_at) : year_at ? year_at : "TBA"}
+                </span>
               </div>
             </div>
             <div className="h-2/3 w-full">
-              {ReleaseDate?.date ? (
+              {release_at ? (
                 <Countdown
                   date={Date.now() + timeToReleaseDate}
                   renderer={(props) => <CountdownTime data={props} type={type} />}
