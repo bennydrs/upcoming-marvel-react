@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { useEffect } from "react"
 import ReactGA from "react-ga4"
 
-ReactGA.initialize("G-Z8Y0BHHEV7")
+ReactGA.initialize(import.meta.env.VITE_GA_MEASUREMENT_ID)
 
 function App() {
   useEffect(() => {
@@ -15,19 +15,19 @@ function App() {
 
   return (
     <div className="flex flex-col h-screen justify-between">
-      <AnimateSharedLayout type="crossfade">
-        <Header />
-        <div className="container mb-auto md:px-2 mt-14">
+      <Header />
+      <div className="container mb-auto md:px-2 mt-14">
+        <AnimateSharedLayout type="crossfade">
           <BrowserRouter>
             <Routes>
               <Route path={"/"} element={<Content />}>
-                <Route path={"/:id"} element={<Content />} />
+                <Route path={":id"} element={<Content />} />
               </Route>
             </Routes>
           </BrowserRouter>
-        </div>
-        <Footer />
-      </AnimateSharedLayout>
+        </AnimateSharedLayout>
+      </div>
+      <Footer />
     </div>
   )
 }

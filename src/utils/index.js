@@ -6,10 +6,8 @@ export const convertToDateFormat = (date) => {
   return `${da} ${mo} ${ye}`
 }
 
-export const convertTimeToReleaseDate = (date, month, year) => {
-  const toDateFormat = convertToDateFormat(date, month, year)
-  return new Date(toDateFormat).getTime() - new Date().getTime()
-}
+export const timeToReleaseDate = (release_at) =>
+  new Date(parseDate(release_at)).getTime() - new Date().getTime()
 
 export const checkDate = (date, month, year) => {
   const toDateFormat = convertToDateFormat(date, month, year)
@@ -23,3 +21,8 @@ export const parseDate = (input) => {
   // new Date(year, month [, day [, hours[, minutes[, seconds[, ms]]]]])
   return new Date(parts[0], parts[1] - 1, parts[2]) // Note: months are 0-based
 }
+
+// export const convertTimeToReleaseDate = (date, month, year) => {
+//   const toDateFormat = convertToDateFormat(date, month, year)
+//   return new Date(toDateFormat).getTime() - new Date().getTime()
+// }

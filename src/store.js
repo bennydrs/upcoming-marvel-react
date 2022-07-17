@@ -8,6 +8,7 @@ const useStore = create((set, get) => ({
   filter: null,
   categories: [],
   loading: false,
+  loadingContent: false,
   error: "",
   isError: false,
   success: false,
@@ -74,22 +75,29 @@ const useStore = create((set, get) => ({
     }
   },
   getContent: async (id, { videos } = {}) => {
-    const { data, error } = await supabase
-      .from("contents")
-      .select(
-        `*, image(*), categories:categories_contents!inner(*, category:categories(name)), contents_genres(genre:genres(*))`
-      )
-      .eq("id", id)
-      .single()
+    set({ loadingContent: true })
+    try {
+      const { data, error } = await supabase
+        .from("contents")
+        .select(
+          `*, image(*), categories:categories_contents!inner(*, category:categories(name)), contents_genres(genre:genres(*))`
+        )
+        .eq("id", id)
+        .single()
 
-    if (error) throw error
-    if (videos) {
-      const { data: dataVideos } = await supabase.from("videos").select("*").eq("content_id", id)
-      set((state) => ({ ...state, content: { ...state.content, videos: dataVideos } }))
+      if (error) throw error
+      if (videos) {
+        const { data: dataVideos } = await supabase.from("videos").select("*").eq("content_id", id)
+        set((state) => ({ ...state, content: { ...state.content, videos: dataVideos } }))
+      }
+
+      set((state) => ({ ...state, content: { ...state.content, ...data } }))
+      // set((state) => ({ ...state, content: content }))
+    } catch (err) {
+      set({ err: err.message })
+    } finally {
+      set({ loadingContent: false })
     }
-
-    set((state) => ({ ...state, content: { ...state.content, ...data } }))
-    // set((state) => ({ ...state, content: content }))
   },
   getLinkDownload: async () => {
     try {

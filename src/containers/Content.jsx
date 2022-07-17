@@ -1,6 +1,6 @@
-import ContentItem from "../components/ContentItem"
+import ListContent from "../components/ListContent"
 import { useEffect } from "react"
-import { AnimateSharedLayout } from "framer-motion"
+import { AnimatePresence } from "framer-motion"
 import ContentSkeleton from "../components/Skeleton/ContentSkeleton"
 import Category from "./Category"
 import NoData from "../components/NoData"
@@ -25,21 +25,17 @@ const Content = () => {
   return (
     <>
       <Category />
-      {contents.length === 0 && !isLoading ? (
+      {contents.length === 0 && search && !isLoading ? (
         <NoData />
       ) : isError ? (
         <Error onClick={() => location.reload()} />
       ) : (
-        <AnimateSharedLayout>
-          <div layout className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6">
-            {isLoading ? (
-              <ContentSkeleton />
-            ) : (
-              contents.map((movie, i) => <ContentItem movie={movie} key={i} index={i} />)
-            )}
+        <>
+          <div layout="true" className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6">
+            {isLoading ? <ContentSkeleton /> : <ListContent contents={contents} />}
           </div>
-          {id && <ModalContent id={id} filter={filter} />}
-        </AnimateSharedLayout>
+          <AnimatePresence>{id && <ModalContent id={id} key="item" />}</AnimatePresence>
+        </>
       )}
     </>
   )

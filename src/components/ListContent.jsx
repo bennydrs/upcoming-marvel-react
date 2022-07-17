@@ -3,7 +3,12 @@ import CountdownTime from "./CountdownTime"
 import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import Badge from "./Badge"
-import { convertToDateFormat, parseDate } from "../utils"
+import { timeToReleaseDate } from "../utils"
+import { AdvancedImage, placeholder } from "@cloudinary/react"
+import { cloudinary } from "../utils/cloudinary"
+import { thumbnail } from "@cloudinary/url-gen/actions/resize"
+import { byRadius } from "@cloudinary/url-gen/actions/roundCorners"
+import ReleaseAt from "./ReleaseAt"
 
 const variants = {
   hidden: {
@@ -22,54 +27,49 @@ const variants = {
   },
 }
 
-const ContentItem = ({ movie, index }) => {
+const Card = ({ movie, index }) => {
   const { id, title, type, image, animated, release_at, year_at } = movie
 
-  const timeToReleaseDate = new Date(parseDate(release_at)).getTime() - new Date().getTime()
+  const imageCld = cloudinary.image(image?.public_id)
+  imageCld.resize(thumbnail().width(150).height(220)).roundCorners(byRadius(16))
 
   return (
     <Link to={`/${id}`}>
       <motion.div
-        layout
+        layout="true"
         variants={variants}
         initial="hidden"
         animate="visible"
         exit="removed"
         custom={index}
-        className="flex bg-white rounded-3xl p-3 space-x-3 max-h-fit shadow-sm hover:bg-gray-50"
+        className="flex bg-white rounded-3xl p-3 space-x-3 shadow-sm xl:min-h-[100px] xl:max-h-[250px] max-h-full hover:bg-gray-50 overflow-hidden"
         layoutId={`card-container-${id}`}
         whileTap={{ scale: 0.98 }}
       >
-        <motion.div className="w-1/3" layoutId={`card-image-container-${id}`}>
-          <img
-            src={image?.url}
-            alt={title}
-            loading="lazy"
+        <motion.div className="" layoutId={`card-image-container-${id}`}>
+          <AdvancedImage
+            cldImg={imageCld}
+            width="150"
+            height="auto"
             className="w-full rounded-2xl bg-gray-400"
+            plugins={[placeholder({ mode: "blur" })]}
           />
         </motion.div>
 
         <div className="w-2/3">
           <div className="flex flex-col h-full">
-            <div className="h-1/2">
-              <motion.h2
-                className="text-lg md:text-xl font-semibold mb-2"
-                layoutId={`card-title-${id}`}
-              >
-                {title}
-              </motion.h2>
+            <motion.div className="h-1/2" layoutId={`card-title-${id}`}>
+              <h2 className="text-lg md:text-xl font-semibold mb-2">{title}</h2>
               <div className="text-sm flex space-x-2 items-center">
                 <Badge type={type} />
                 {animated && <Badge type={"A"} animated />}
-                <span className="text-gray-600">
-                  {release_at ? convertToDateFormat(release_at) : year_at ? year_at : "TBA"}
-                </span>
+                <ReleaseAt release_at={release_at} year_at={year_at} />
               </div>
-            </div>
-            <div className="h-2/3 w-full">
+            </motion.div>
+            <motion.div className="h-2/3 w-full" layoutId={`card-countdown-${id}`}>
               {release_at ? (
                 <Countdown
-                  date={Date.now() + timeToReleaseDate}
+                  date={Date.now() + timeToReleaseDate(release_at)}
                   renderer={(props) => <CountdownTime data={props} type={type} />}
                 />
               ) : (
@@ -77,7 +77,7 @@ const ContentItem = ({ movie, index }) => {
                   <p className="text-gray-500">Release date to be announced</p>
                 </div>
               )}
-            </div>
+            </motion.div>
           </div>
         </div>
       </motion.div>
@@ -85,4 +85,8 @@ const ContentItem = ({ movie, index }) => {
   )
 }
 
-export default ContentItem
+const ListContent = ({ contents }) => {
+  return contents.map((movie, i) => <Card movie={movie} key={i} index={i} />)
+}
+
+export default ListContent
