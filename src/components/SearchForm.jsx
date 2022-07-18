@@ -4,8 +4,10 @@ import useStore from "../store"
 const SearchForm = ({ autoFocus }) => {
   const setSearch = useStore((state) => state.setSearch)
   const search = useStore((state) => state.search)
+  const setPage = useStore((state) => state.setPage)
 
   const handleSearch = (e) => {
+    setPage(1)
     setSearch(e.target.value)
   }
 
@@ -13,7 +15,7 @@ const SearchForm = ({ autoFocus }) => {
     <div className="w-full">
       <div className="relative text-white focus-within:text-gray-900">
         <span className="absolute inset-y-0 left-0 flex items-center pl-2">
-          <button className="p-1 focus:outline-none focus:shadow-outline">
+          <button className="p-1 focus:outline-none focus:shadow-outline" aria-label="search-label">
             <svg
               fill="none"
               stroke="currentColor"

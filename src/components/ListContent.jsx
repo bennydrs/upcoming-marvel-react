@@ -9,6 +9,7 @@ import { cloudinary } from "../utils/cloudinary"
 import { thumbnail } from "@cloudinary/url-gen/actions/resize"
 import { byRadius } from "@cloudinary/url-gen/actions/roundCorners"
 import ReleaseAt from "./ReleaseAt"
+import { useEffect, useRef } from "react"
 
 const variants = {
   hidden: {
@@ -33,12 +34,20 @@ const Card = ({ movie, index }) => {
   const imageCld = cloudinary.image(image?.public_id)
   imageCld.resize(thumbnail().width(150).height(220)).roundCorners(byRadius(16))
 
+  let hasRenderedProjectsRef = useRef(false)
+  useEffect(() => {
+    if (id) {
+      hasRenderedProjectsRef.current = true
+    } else {
+      hasRenderedProjectsRef.current = false
+    }
+  }, [])
+
   return (
     <Link to={`/${id}`}>
       <motion.div
-        layout="true"
         variants={variants}
-        initial="hidden"
+        initial={"visible"}
         animate="visible"
         exit="removed"
         custom={index}
@@ -46,11 +55,12 @@ const Card = ({ movie, index }) => {
         layoutId={`card-container-${id}`}
         whileTap={{ scale: 0.98 }}
       >
-        <motion.div className="" layoutId={`card-image-container-${id}`}>
+        <motion.div layoutId={`card-image-container-${id}`}>
           <AdvancedImage
             cldImg={imageCld}
+            loading="lazy"
             width="150"
-            height="auto"
+            height="220"
             className="w-full rounded-2xl bg-gray-400"
             plugins={[placeholder({ mode: "blur" })]}
           />

@@ -10,10 +10,16 @@ const Category = () => {
   const filter = useStore((state) => state.filter)
   const loading = useStore((state) => state.loading)
   const isError = useStore((state) => state.isError)
+  const setPage = useStore((state) => state.setPage)
 
   useEffect(() => {
     getCategories()
   }, [])
+
+  const handleSelect = (categoryId) => {
+    setPage(1)
+    setFilter(categoryId)
+  }
 
   return (
     <div className="flex md:justify-center w-full py-4 overflow-x-scroll no-scrollbar space-x-3 px-2 sm:px-0">
@@ -51,7 +57,7 @@ const Category = () => {
                 : "bg-white hover:bg-gray-50"
             }`}
             key={i}
-            onClick={() => setFilter(category.id)}
+            onClick={() => handleSelect(category.id)}
             whileTap={{ scale: 0.9 }}
             whileHover={{ scale: 1.08 }}
           >

@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <header className="bg-primary fixed w-full z-10">
       <div className="container px-2 flex justify-between items-center h-14 relative">
-        <img src={Logo} className="w-56 md:w-60" width={224} alt="logo" />
+        <img src={Logo} className="w-56 md:w-60" width={224} height={42} alt="logo" />
 
         <div className="hidden md:block">
           <SearchForm />
