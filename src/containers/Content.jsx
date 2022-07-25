@@ -1,44 +1,66 @@
-import ContentItem from "../components/ContentItem"
-import { useState } from "react"
+import ListContent from "../components/ListContent"
+import { useEffect } from "react"
 import { AnimatePresence } from "framer-motion"
-import useContent from "../hooks/useContent"
 import ContentSkeleton from "../components/Skeleton/ContentSkeleton"
 import Category from "./Category"
 import NoData from "../components/NoData"
 import Error from "../components/Error"
 import { useParams } from "react-router-dom"
 import ModalContent from "../components/ModalContent"
+import useStore from "../store"
+import InfiniteScroll from "react-infinite-scroll-component"
+import Loading from "../components/Loading"
 
-const Content = ({ search }) => {
+const Content = () => {
   const { id } = useParams()
-  const [filter, setFilter] = useState("All")
-  const { data, isError, isLoading } = useContent(filter)
+  const filter = useStore((state) => state.filter)
+  const isLoading = useStore((state) => state.loadingContents)
+  const getContents = useStore((state) => state.getContents)
+  const getMoreContents = useStore((state) => state.getMoreContents)
+  const { data: contents, count } = useStore((state) => state.contents)
+  const page = useStore((state) => state.page)
+  const setPage = useStore((state) => state.setPage)
+  const search = useStore((state) => state.search)
+  const isError = useStore((state) => state.isError)
 
-  const filtered = data?.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
+  useEffect(() => {
+    setPage(1)
+    getContents()
+  }, [filter, search])
 
-  if (filtered?.length === 0) return <NoData />
+  const fetchContents = () => {
+    setPage(page + 1)
+    getMoreContents({ page })
+  }
 
   return (
     <>
-      <Category filter={filter} setFilter={setFilter} />
-      <AnimatePresence>{id && <ModalContent id={id} filter={filter} key="item" />}</AnimatePresence>
-      <AnimatePresence>
-        <div
-          className={` ${
-            isError ? "grid-cols-0" : "grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6"
-          }`}
-        >
+      <Category />
+      {contents.length === 0 && search && !isLoading ? (
+        <NoData />
+      ) : isError ? (
+        <Error onClick={() => location.reload()} />
+      ) : (
+        <>
           {isLoading ? (
-            <ContentSkeleton />
-          ) : isError ? (
-            <Error onClick={() => location.reload()} />
+            <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6 overflow-hidden">
+              <ContentSkeleton />
+            </div>
           ) : (
-            filtered?.map((movie, i) => (
-              <ContentItem movie={movie} filter={filter} key={i} index={i} />
-            ))
+            <InfiniteScroll
+              dataLength={contents.length}
+              next={fetchContents}
+              hasMore={contents.length < count}
+              loader={<Loading />}
+            >
+              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6 overflow-hidden">
+                <ListContent contents={contents} />
+              </div>
+            </InfiniteScroll>
           )}
-        </div>
-      </AnimatePresence>
+          <AnimatePresence>{id && <ModalContent id={id} key="item" />}</AnimatePresence>
+        </>
+      )}
     </>
   )
 }

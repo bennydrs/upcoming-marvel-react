@@ -1,10 +1,12 @@
 import { AnimatePresence, motion } from "framer-motion"
 import { useState } from "react"
 import Logo from "../img/logo.png"
+import useStore from "../store"
 import SearchForm from "./SearchForm"
 
-const Header = ({ search, setSearch }) => {
+const Header = () => {
   const [isOpen, setIsOpen] = useState(false)
+  const setSearch = useStore((state) => state.setSearch)
 
   const handleClose = () => {
     setSearch("")
@@ -12,13 +14,14 @@ const Header = ({ search, setSearch }) => {
   }
 
   return (
-    <header className="bg-primary ">
+    <header className="bg-primary fixed w-full z-10">
       <div className="container px-2 flex justify-between items-center h-14 relative">
-        <img src={Logo} className="w-56 md:w-60" alt="logo" />
+        <img src={Logo} className="w-56 md:w-60" width={224} height={42} alt="logo" />
 
         <div className="hidden md:block">
-          <SearchForm search={search} setSearch={setSearch} />
+          <SearchForm />
         </div>
+        {/* search icon on mobile */}
         <button
           onClick={() => setIsOpen(true)}
           className="block md:hidden p-1.5 focus:outline-none focus:shadow-outline bg-gray-50/40 rounded-lg text-white"
@@ -46,7 +49,7 @@ const Header = ({ search, setSearch }) => {
             className="absolute w-full top-0 bg-primary block md:hidden"
           >
             <div className="container  flex justify-between items-center h-14 px-2 space-x-2">
-              <SearchForm autoFocus={isOpen} search={search} setSearch={setSearch} />
+              <SearchForm autoFocus={isOpen} />
               <button className="text-white bg-gray-50/40 p-1.5 rounded-md" onClick={handleClose}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"

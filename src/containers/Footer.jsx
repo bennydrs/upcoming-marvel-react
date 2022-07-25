@@ -1,21 +1,27 @@
-import useLinkDownload from "../hooks/useLinkDownload"
+import { useEffect } from "react"
+import useStore from "../store"
 
 const Footer = () => {
-  const { data, isLoading, isError } = useLinkDownload()
-  const url = data?.data.attributes.url
+  const linkDownload = useStore((state) => state.linkDownload)
+  const getLinkDownload = useStore((state) => state.getLinkDownload)
+  const loading = useStore((state) => state.loading)
+
+  useEffect(() => {
+    getLinkDownload()
+  }, [])
 
   return (
     <footer className="w-full bg-gray-900 text-white py-3 mt-4">
       <div className="container text-center">
-        {isError ? (
+        {!linkDownload ? (
           ""
         ) : (
           <a
-            href={url}
+            href={linkDownload[0]?.url}
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-gray-400 flex items-center justify-center"
-            style={{ pointerEvents: isLoading && "none" }}
+            style={{ pointerEvents: loading && "none" }}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -36,15 +42,15 @@ const Footer = () => {
           </a>
         )}
         <div className="mt-5 text-gray-300">
-          Made by{" "}
-          <a
+          Made by Benny Ds
+          {/* <a
             href="https://github.com/bennydrs"
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-gray-400"
           >
             Benny Ds
-          </a>
+          </a> */}
         </div>
       </div>
     </footer>
