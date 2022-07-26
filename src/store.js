@@ -15,7 +15,7 @@ const fetchContents = ({ from, to, limit, page, filter, search }) => {
 
   let query = supabase
     .from("contents")
-    .select(`*, image(*), categories:categories_contents!inner(*, category:categories(name))`, {
+    .select(`*, image(*), categories:categories_contents(*, category:categories(name))`, {
       count: "exact",
     })
     .or(`release_at.gte.${date},release_at.is.null`)
@@ -116,7 +116,7 @@ const useStore = create((set, get) => ({
     try {
       const { data: categories, error } = await supabase
         .from("categories")
-        .select(`*`)
+        .select(`*, categories_contents!inner(*)`)
         .eq("is_published", true)
         .order("name", { ascending: true })
 

@@ -4,10 +4,6 @@ import { motion } from "framer-motion"
 import { Link } from "react-router-dom"
 import Badge from "./Badge"
 import { timeToReleaseDate } from "../utils"
-import { AdvancedImage, placeholder } from "@cloudinary/react"
-import { cloudinary } from "../utils/cloudinary"
-import { thumbnail } from "@cloudinary/url-gen/actions/resize"
-import { byRadius } from "@cloudinary/url-gen/actions/roundCorners"
 import ReleaseAt from "./ReleaseAt"
 import { useEffect, useRef } from "react"
 
@@ -31,8 +27,8 @@ const variants = {
 const Card = ({ movie, index }) => {
   const { id, title, type, image, animated, release_at, year_at } = movie
 
-  const imageCld = cloudinary.image(image?.public_id)
-  imageCld.resize(thumbnail().width(150).height(220)).roundCorners(byRadius(16))
+  // const imageCld = cloudinary.image(image?.public_id)
+  // imageCld.resize(thumbnail().width(150).height(220)).roundCorners(byRadius(16))
 
   let hasRenderedProjectsRef = useRef(false)
   useEffect(() => {
@@ -56,14 +52,22 @@ const Card = ({ movie, index }) => {
         whileTap={{ scale: 0.98 }}
       >
         <motion.div layoutId={`card-image-container-${id}`}>
-          <AdvancedImage
+          <img
+            src={image.url}
+            alt=""
+            loading="lazy"
+            width="150"
+            height="220"
+            className="rounded-2xl bg-gray-400 w-[150] h-full"
+          />
+          {/* <AdvancedImage
             cldImg={imageCld}
             loading="lazy"
             width="150"
             height="220"
             className="w-full rounded-2xl bg-gray-400"
             plugins={[placeholder({ mode: "blur" })]}
-          />
+          /> */}
         </motion.div>
 
         <div className="w-2/3">

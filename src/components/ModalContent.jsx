@@ -1,24 +1,24 @@
-import React, { useEffect, useState } from "react"
+import React, { Suspense, useEffect, useMemo, useState } from "react"
 import { motion } from "framer-motion"
 import Countdown from "react-countdown"
 import { Link } from "react-router-dom"
 import useStore from "../store"
 import { timeToReleaseDate } from "../utils"
-import { AdvancedImage, placeholder } from "@cloudinary/react"
-import { cloudinary } from "../utils/cloudinary"
 import CountdownTime from "./CountdownTime"
 import Badge from "./Badge"
 import Loading from "./Loading"
 import ListGenre from "./ListGenre"
-import ListVideo from "./ListVideo"
 import ReleaseAt from "./ReleaseAt"
+
+const ListVideo = React.lazy(() => import("./ListVideo"))
 
 const ModalContent = ({ id }) => {
   const contents = useStore((state) => state.contents)
   const isLoading = useStore((state) => state.loadingContent)
   const getContent = useStore((state) => state.getContent)
   const contentDetail = useStore((state) => state.content)
-  const content = contents.data.find((c) => c.id == id) ?? contentDetail
+  const content = useMemo(() => contents.data.find((c) => c.id == id) ?? contentDetail, [contents])
+  // const imageCld = useMemo(() => cloudinary.image(content?.image?.public_id), [content])
 
   const [load, setLoad] = useState(false)
 
@@ -74,11 +74,21 @@ const ModalContent = ({ id }) => {
               ) : (
                 <>
                   <motion.div className="sm:w-1/2 h-full" layoutId={`card-image-container-${id}`}>
-                    <AdvancedImage
-                      cldImg={cloudinary.image(content?.image?.public_id)}
+                    <img
+                      src={content?.image?.url}
+                      alt={content?.title}
+                      width="400"
+                      height="600"
+                      loading="lazy"
                       className="block overflow-hidden rounded-2xl bg-gray-400 w-[600px] max-w-full h-auto"
-                      plugins={[placeholder({ mode: "blur" })]}
                     />
+
+                    {/* <AdvancedImage
+                        cldImg={imageCld}
+                        className="block overflow-hidden rounded-2xl bg-gray-400 w-[600px] max-w-full h-auto"
+                        plugins={[placeholder({ mode: "blur" })]}
+                        loading="lazy"
+                      /> */}
                   </motion.div>
 
                   <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4 sm:w-1/2 overflow-auto sm:absolute sm:right-0 sm:top-0 sm:bottom-16">
@@ -109,13 +119,9 @@ const ModalContent = ({ id }) => {
                             </div>
                           )
                         )}
-                        <motion.div
-                          className="mt-3"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1, transition: { duration: 1.2 } }}
-                        >
-                          <p className="text-gray-900">{content?.description}</p>
-                        </motion.div>
+
+                        <p className="text-gray-900 mt-3">{content?.description}</p>
+
                         <motion.div className="h-2/3 w-full px-6" layoutId={`card-countdown-${id}`}>
                           {content?.release_at ? (
                             <Countdown
@@ -134,21 +140,23 @@ const ModalContent = ({ id }) => {
                     </div>
                     <h2 className="mt-6 mb-3 font-semibold">Trailer</h2>
 
-                    <motion.div
-                      className="w-full"
-                      initial={!isLoading && { opacity: 0, y: -20 }}
-                      animate={{ opacity: 1, y: 0, transition: { duration: 1.2 } }}
-                    >
-                      {isLoading ? (
-                        <div className="animate-pulse flex space-x-4 py-2 mt-3">
-                          <div className="rounded-xl bg-gray-300 h-[200px] w-full"></div>
-                        </div>
-                      ) : contentDetail?.videos?.length < 1 ? (
-                        <h2 className="mt-2 mb-3 text-gray-600">Trailer not yet available</h2>
-                      ) : (
-                        <ListVideo videos={contentDetail?.videos} />
-                      )}
-                    </motion.div>
+                    <Suspense fallback={<div className="text-2xl">Loading …</div>}>
+                      <motion.div
+                        className="w-full"
+                        initial={!isLoading && { opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0, transition: { duration: 1.2 } }}
+                      >
+                        {isLoading ? (
+                          <div className="animate-pulse flex space-x-4 py-2 mt-3">
+                            <div className="rounded-xl bg-gray-300 h-[200px] w-full"></div>
+                          </div>
+                        ) : contentDetail?.videos?.length < 1 ? (
+                          <h2 className="mt-2 mb-3 text-gray-600">Trailer not yet available</h2>
+                        ) : (
+                          <ListVideo id={id} videos={contentDetail?.videos} />
+                        )}
+                      </motion.div>
+                    </Suspense>
                   </div>
                   <div className="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse sm:absolute sm:right-0 sm:bottom-0 sm:w-1/2">
                     <Link to="/">

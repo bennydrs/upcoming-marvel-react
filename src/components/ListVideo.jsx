@@ -1,7 +1,7 @@
 import YouTube from "react-youtube"
 
-const ListVideo = ({ videos }) => {
-  return videos
+const ListVideo = ({ videos, id }) => {
+  return videos?.length
     ? videos?.map((video, i) => (
         <div className="rounded-xl overflow-hidden h-[200px] mb-3" key={i}>
           <YouTube
