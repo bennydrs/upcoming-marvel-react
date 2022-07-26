@@ -15,7 +15,7 @@ const fetchContents = ({ from, to, limit, page, filter, search }) => {
 
   let query = supabase
     .from("contents")
-    .select(`*, image(*), categories:categories_contents(*, category:categories(name))`, {
+    .select(`*, image(*), categories:categories_contents!inner(*, category:categories(name))`, {
       count: "exact",
     })
     .or(`release_at.gte.${date},release_at.is.null`)
