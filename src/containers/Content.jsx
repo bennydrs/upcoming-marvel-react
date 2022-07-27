@@ -45,7 +45,7 @@ const Content = () => {
 
   const navigate = useNavigate()
 
-  const isMobile = useMediaQuery({ maxWidth: 767 })
+  const isMobile = useMediaQuery({ maxWidth: 640 })
 
   return (
     <>
@@ -79,7 +79,7 @@ const Content = () => {
               (isMobile ? (
                 <ContentModalMobile id={id} onClose={() => navigate("/")} />
               ) : (
-                <ModalContent id={id} key="item" />
+                <ModalContent id={id} onClose={() => navigate("/")} />
               ))}
           </AnimatePresence>
         </>
@@ -102,7 +102,7 @@ function ContentModalMobile({ onClose, id }) {
   return (
     <Modal onClose={onClose}>
       <div className="flex flex-col h-full">
-        <div className="px-3 bg-white fixed w-full h-14 ">
+        <div className="px-3 bg-white fixed w-full h-14 drop-shadow">
           <div className="relative mt-4 text-center">
             <div className="absolute inset-y-0 left-0">
               <button className="focus:outline-none p-1" onClick={onClose}>

@@ -14,9 +14,9 @@ function App() {
   }, [])
 
   return (
-    <div className="flex flex-col h-screen justify-between">
+    <div className="flex flex-col min-h-screen justify-between bg-gray-200">
       <Header />
-      <div className="container mb-auto  md:px-2 mt-14 pt-safe-top bg-gray-200">
+      <div className="container mb-auto md:px-2 mt-14 pt-safe-top bg-gray-200">
         <AnimateSharedLayout type="crossfade">
           <BrowserRouter>
             <Routes>
