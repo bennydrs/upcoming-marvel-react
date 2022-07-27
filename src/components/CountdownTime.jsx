@@ -6,8 +6,8 @@ const Completionist = ({ type }) => (
 
 const ElementTime = ({ time, labelTime }) => (
   <div className="flex flex-col items-center">
-    <p className="text-xl">{time}</p>
-    <span className="font-light text-sm">{labelTime}</span>
+    <p className="text-lg md:text-xl">{time}</p>
+    <span className="font-light text-xs md:text-sm">{labelTime}</span>
   </div>
 )
 

@@ -51,23 +51,15 @@ const Card = ({ movie, index }) => {
         layoutId={`card-container-${id}`}
         whileTap={{ scale: 0.98 }}
       >
-        <motion.div layoutId={`card-image-container-${id}`}>
+        <motion.div className="w-1/3" layoutId={`card-image-container-${id}`}>
           <img
             src={image.url}
             alt=""
             loading="lazy"
             width="150"
             height="220"
-            className="rounded-2xl bg-gray-400 w-[150] h-full"
+            className="rounded-2xl bg-gray-400 w-[150] h-auto"
           />
-          {/* <AdvancedImage
-            cldImg={imageCld}
-            loading="lazy"
-            width="150"
-            height="220"
-            className="w-full rounded-2xl bg-gray-400"
-            plugins={[placeholder({ mode: "blur" })]}
-          /> */}
         </motion.div>
 
         <div className="w-2/3">

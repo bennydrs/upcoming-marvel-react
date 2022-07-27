@@ -34,6 +34,7 @@ const ModalContent = ({ id }) => {
   }, [id])
 
   window.addEventListener("load", () => setLoad(true))
+  console.log("modal content")
 
   return (
     <motion.div
