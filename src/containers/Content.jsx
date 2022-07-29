@@ -17,6 +17,7 @@ import ListGenre from "../components/ListGenre"
 import Countdown from "react-countdown"
 import { timeToReleaseDate } from "../utils"
 import CountdownTime from "../components/CountdownTime"
+import { useContent } from "../hooks/useContent"
 
 const LazyListVideo = React.lazy(() => import("../components/ListVideo"))
 const LazyCategory = React.lazy(() => import("./Category"))
@@ -74,7 +75,7 @@ const Content = () => {
               </div>
             </InfiniteScroll>
           )}
-          <AnimatePresence>
+          <AnimatePresence exitBeforeEnter>
             {id &&
               (isMobile ? (
                 <ContentModalMobile id={id} onClose={() => navigate("/")} />
@@ -91,13 +92,7 @@ const Content = () => {
 export default Content
 
 function ContentModalMobile({ onClose, id }) {
-  const getContent = useStore((state) => state.getContent)
-  const content = useStore((state) => state.content)
-  const isLoading = useStore((state) => state.loadingContent)
-
-  useEffect(() => {
-    getContent(id, { videos: true })
-  }, [id])
+  const { data: content = {}, isLoading } = useContent(id, { videos: true })
 
   return (
     <Modal onClose={onClose}>
