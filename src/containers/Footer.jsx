@@ -1,8 +1,8 @@
 const Footer = () => {
   return (
     <footer className="w-full bg-neutral-900 text-white mt-4">
-      <div className="container text-center py-6">
-        <p className="text-sm text-gray-400">
+      <div className="container text-center py-6 px-4 sm:px-0">
+        <p className="text-xs sm:text-sm text-gray-400">
           All logos, photos and all contents in this web are Creative Commons Licensed (CC-BY-SA).
           <br /> License details for all of these assets can be found on{" "}
           <a
