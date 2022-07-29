@@ -43,7 +43,7 @@ const Card = ({ movie, index }) => {
     <Link to={`/${id}`}>
       <motion.div
         variants={variants}
-        initial={"visible"}
+        initial={"hidden"}
         animate="visible"
         exit="removed"
         custom={index}

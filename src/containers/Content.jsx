@@ -70,9 +70,15 @@ const Content = () => {
               hasMore={contents.length < count}
               loader={<Loading />}
             >
-              <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6 overflow-hidden">
+              <motion.div
+                initial="initial"
+                animate="enter"
+                exit="exit"
+                variants={{ exit: { transition: { staggerChildren: 0.1 } } }}
+                className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6 overflow-hidden"
+              >
                 <ListContent contents={contents} />
-              </div>
+              </motion.div>
             </InfiniteScroll>
           )}
           <AnimatePresence exitBeforeEnter>
