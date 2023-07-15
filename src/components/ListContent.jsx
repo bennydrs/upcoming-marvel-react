@@ -24,7 +24,7 @@ const variants = {
   },
 }
 
-const Card = ({ movie, index }) => {
+const Card = ({ movie, index, setIsClicked }) => {
   const { id, title, type, image, animated, release_at, year_at } = movie
 
   // const imageCld = cloudinary.image(image?.public_id)
@@ -40,7 +40,7 @@ const Card = ({ movie, index }) => {
   }, [])
 
   return (
-    <Link to={`/${id}`}>
+    <Link to={`/${id}`} onClick={() => setIsClicked(true)}>
       <motion.div
         variants={variants}
         initial={"hidden"}
@@ -91,8 +91,10 @@ const Card = ({ movie, index }) => {
   )
 }
 
-const ListContent = ({ contents }) => {
-  return contents.map((movie, i) => <Card movie={movie} key={i} index={i} />)
+const ListContent = ({ contents, setIsClicked }) => {
+  return contents.map((movie, i) => (
+    <Card movie={movie} key={i} index={i} setIsClicked={setIsClicked} />
+  ))
 }
 
 export default ListContent

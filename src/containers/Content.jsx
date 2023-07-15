@@ -1,5 +1,5 @@
 import ListContent from "../components/ListContent"
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import ContentSkeleton from "../components/Skeleton/ContentSkeleton"
 import NoData from "../components/NoData"
@@ -48,6 +48,9 @@ const Content = () => {
 
   const isMobile = useMediaQuery({ maxWidth: 640 })
 
+  // if modal clicked set to true
+  const [isClicked, setIsClicked] = useState(false)
+
   return (
     <>
       <React.Suspense fallback={""}>
@@ -77,7 +80,7 @@ const Content = () => {
                 variants={{ exit: { transition: { staggerChildren: 0.1 } } }}
                 className="grid gap-4 md:grid-cols-2 xl:grid-cols-3 px-2 sm:px-0 mb-6 overflow-hidden"
               >
-                <ListContent contents={contents} />
+                <ListContent contents={contents} setIsClicked={setIsClicked} />
               </motion.div>
             </InfiniteScroll>
           )}
@@ -86,7 +89,7 @@ const Content = () => {
               (isMobile ? (
                 <ContentModalMobile id={id} onClose={() => navigate("/")} />
               ) : (
-                <ModalContent id={id} onClose={() => navigate("/")} />
+                <ModalContent id={id} onClose={() => navigate("/")} isClicked={isClicked} />
               ))}
           </AnimatePresence>
         </>

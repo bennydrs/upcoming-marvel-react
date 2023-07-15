@@ -13,7 +13,7 @@ import { Dialog } from "@headlessui/react"
 const LazyListVideo = React.lazy(() => import("./ListVideo"))
 const LazyCountdownTime = React.lazy(() => import("./CountdownTime"))
 
-const ModalContent = ({ id, onClose }) => {
+const ModalContent = ({ id, onClose, isClicked }) => {
   const contents = useStore((state) => state.contents)
   const isLoading = useStore((state) => state.loadingContent)
   const getContent = useStore((state) => state.getContent)
@@ -29,7 +29,7 @@ const ModalContent = ({ id, onClose }) => {
   window.addEventListener("load", () => setLoad(true))
 
   return (
-    <Modal onClose={onClose} id={id}>
+    <Modal onClose={onClose} id={id} isClicked={isClicked}>
       {isLoading && load ? (
         <div className="h-full bg-white z-10 rounded-2xl shadow-xl p-3">
           <div className="flex justify-center items-center">
@@ -139,7 +139,7 @@ const ModalContent = ({ id, onClose }) => {
   )
 }
 
-function Modal({ onClose, children, id }) {
+function Modal({ onClose, children, id, isClicked }) {
   return (
     <Dialog className="fixed inset-0 z-10 " onClose={onClose} open={true}>
       <div className="flex min-h-full items-center justify-center p-4 text-center">
@@ -161,16 +161,22 @@ function Modal({ onClose, children, id }) {
           className="fixed inset-0 bg-black/80"
         />
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0, transition: { duration: 0.1 } }}
-          transition={{ duration: 0.2, delay: 0.1 }}
-          layoutId={`card-container-${id}`}
-          className="bg-white rounded-2xl text-left overflow-hidden shadow-xl w-full my-8 sm:max-w-4xl h-full relative"
-        >
-          {children}
-        </motion.div>
+        {isClicked ? (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.1 } }}
+            transition={{ duration: 0.2, delay: 0.1 }}
+            layoutId={`card-container-${id}`}
+            className="bg-white rounded-2xl text-left overflow-hidden shadow-xl w-full my-8 sm:max-w-4xl h-full relative"
+          >
+            {children}
+          </motion.div>
+        ) : (
+          <div className="bg-white rounded-2xl text-left overflow-hidden shadow-xl w-full my-8 sm:max-w-4xl h-full relative">
+            {children}
+          </div>
+        )}
       </div>
     </Dialog>
   )
